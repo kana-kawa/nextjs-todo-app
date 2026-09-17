@@ -65,6 +65,8 @@ export default function TodoApp({
   const [sharing, setSharing] = useState(false);
   const [copyStatus, setCopyStatus] = useState<"idle" | "copied">("idle");
   const [origin, setOrigin] = useState("");
+  const [confirmingRevoke, setConfirmingRevoke] = useState(false);
+  const [revoking, setRevoking] = useState(false);
 
   const dirtyRef = useRef(false);
   const skipNextSyncRef = useRef(isShared);
@@ -190,6 +192,22 @@ export default function TodoApp({
     } catch {
       // クリップボードが使えない環境では何もしない
     }
+  }
+
+  async function handleRevoke() {
+    if (!shareId) return;
+    setRevoking(true);
+    try {
+      const res = await fetch(`/api/share/${shareId}`, { method: "DELETE" });
+      if (res.ok) {
+        router.push("/todo");
+        return;
+      }
+    } catch {
+      // 失敗した場合はボタンを再度押せる状態に戻す
+    }
+    setRevoking(false);
+    setConfirmingRevoke(false);
   }
 
   function addTodo() {
@@ -365,6 +383,32 @@ export default function TodoApp({
             >
               {copyStatus === "copied" ? "コピーしました" : "リンクをコピー"}
             </button>
+            {!confirmingRevoke ? (
+              <button
+                onClick={() => setConfirmingRevoke(true)}
+                className="flex min-h-8 items-center justify-center rounded-full border border-black/10 px-3 text-sm text-black/60 transition hover:bg-black/5 dark:border-white/20 dark:text-white/60 dark:hover:bg-white/10"
+              >
+                共有を解除する
+              </button>
+            ) : (
+              <span className="flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-3 py-1 text-sm dark:border-red-900 dark:bg-red-950">
+                本当に解除しますか？
+                <button
+                  onClick={handleRevoke}
+                  disabled={revoking}
+                  className="font-medium text-red-600 underline disabled:opacity-50 dark:text-red-400"
+                >
+                  {revoking ? "解除中…" : "解除する"}
+                </button>
+                <button
+                  onClick={() => setConfirmingRevoke(false)}
+                  disabled={revoking}
+                  className="text-black/60 underline disabled:opacity-50 dark:text-white/60"
+                >
+                  キャンセル
+                </button>
+              </span>
+            )}
           </div>
         )}
       </div>

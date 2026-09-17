@@ -48,3 +48,22 @@ export async function PUT(
 
   return NextResponse.json({ ok: true });
 }
+
+export async function DELETE(
+  _request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params;
+  await ensureSharedListsTable();
+  const sql = getSql();
+
+  const rows = await sql`
+    DELETE FROM shared_lists WHERE id = ${id} RETURNING id
+  `;
+
+  if (rows.length === 0) {
+    return NextResponse.json({ error: "not_found" }, { status: 404 });
+  }
+
+  return NextResponse.json({ ok: true });
+}
