@@ -22,13 +22,13 @@ export default function Home() {
           <div className="flex items-center gap-4">
             <a
               href="/todo"
-              className="text-sm font-medium text-black/70 transition hover:text-black dark:text-white/70 dark:hover:text-white"
+              className="flex min-h-11 items-center text-base font-medium text-black/70 transition hover:text-black dark:text-white/70 dark:hover:text-white"
             >
               ToDoリスト
             </a>
             <a
               href="#cta"
-              className="rounded-full bg-foreground px-4 py-2 text-sm font-medium text-background transition hover:opacity-90"
+              className="flex min-h-11 items-center justify-center rounded-full bg-foreground px-4 text-base font-medium text-background transition hover:opacity-90"
             >
               はじめる
             </a>
@@ -51,13 +51,13 @@ export default function Home() {
             <a
               id="cta"
               href="#"
-              className="rounded-full bg-foreground px-6 py-3 text-sm font-medium text-background transition hover:opacity-90"
+              className="flex min-h-11 items-center justify-center rounded-full bg-foreground px-6 text-base font-medium text-background transition hover:opacity-90"
             >
               無料で始める
             </a>
             <a
               href="#features"
-              className="rounded-full border border-black/10 px-6 py-3 text-sm font-medium transition hover:bg-black/5 dark:border-white/20 dark:hover:bg-white/10"
+              className="flex min-h-11 items-center justify-center rounded-full border border-black/10 px-6 text-base font-medium transition hover:bg-black/5 dark:border-white/20 dark:hover:bg-white/10"
             >
               詳しく見る
             </a>
@@ -73,7 +73,7 @@ export default function Home() {
               {features.map((feature) => (
                 <div key={feature.title} className="flex flex-col gap-2">
                   <h3 className="text-lg font-semibold">{feature.title}</h3>
-                  <p className="text-sm text-black/70 dark:text-white/70">
+                  <p className="text-base text-black/70 dark:text-white/70">
                     {feature.description}
                   </p>
                 </div>
